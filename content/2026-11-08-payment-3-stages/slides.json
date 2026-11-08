@@ -1,0 +1,112 @@
+{
+  "title": "서비스는 만들었는데, 결제는 어떻게 하죠? — 바이브코더가 결제에서 막히는 3단계",
+  "theme": "dark",
+  "slides": [
+    {
+      "type": "cover",
+      "kicker": "결제 3단계",
+      "title": "서비스는 완성!\n*결제*는 어떻게 하죠?",
+      "sub": "바이브코더가 결제에서 막히는 3단계"
+    },
+    {
+      "type": "content",
+      "title": "만드는 건 됐는데\n결제 앞에서 멈췄다면",
+      "body": "AI와 화면도 기능도 만들었는데\n결제 버튼 앞에서 막막해지죠.\n막히는 곳은 대체로 세 군데예요.\n*가입·심사, 연동, 운영.*"
+    },
+    {
+      "type": "list",
+      "title": "1단계 가입·심사\n신청 전 *체크 질문*",
+      "items": [
+        "신청·사이트 정보가 같나요?",
+        "환불·취소 안내가 보이나요?",
+        "약관·개인정보처리방침이 있나요?",
+        "제한 업종은 아닌가요?",
+        "사업자등록이 필요한지 확인했나요?"
+      ],
+      "num": 1
+    },
+    {
+      "type": "content",
+      "num": 2,
+      "title": "2단계 연동\n금액은 *서버*가 다시 확인",
+      "body": "AI가 짠 코드는 브라우저가 보낸 금액을\n그대로 믿게 만들어질 수 있어요.\n승인 요청 전, 서버에 저장한\n주문 금액과 맞는지 대조하세요."
+    },
+    {
+      "type": "list",
+      "title": "연동 전\n이것만은 *점검*해요",
+      "items": [
+        "결제 완료는 서버에서 확인",
+        "웹훅(결제 결과 알림)에 빠르게 응답",
+        "재전송돼도 두 번 처리되지 않게",
+        "테스트·라이브 키는 분리",
+        "라이브 전환 후 다시 테스트"
+      ]
+    },
+    {
+      "type": "content",
+      "num": 3,
+      "title": "3단계 운영\n결제 후에 *정할 것들*",
+      "body": "정산(판매 대금 입금)은 언제인지,\n취소·환불은 어떻게 처리할지,\n정기결제라면 고객이 동의한 금액·주기는?\n오픈 전에 정해두면 덜 당황해요."
+    },
+    {
+      "type": "list",
+      "title": "저장해두고\n*순서대로* 체크하세요",
+      "items": [
+        "① 가입·심사: 정보·정책·업종",
+        "② 연동: 금액·결과는 서버 확인",
+        "③ 운영: 정산·환불 미리 정하기",
+        "처음이라도 순서대로면 괜찮아요"
+      ]
+    },
+    {
+      "type": "point",
+      "kicker": "바이브페이",
+      "title": "그래서,\n*바이브페이*는",
+      "stats": [
+        {
+          "big": "사업자등록 *없이도* 신청",
+          "label": "개인·비사업자도 신청 가능\n(심사·계약 후 이용)"
+        },
+        {
+          "big": "심사는 *D+1*",
+          "label": "접수 후 D+1일 (영업일 기준)\n보완 시 연장될 수 있어요"
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "title": "오픈 기념\n*관리비 1개월 무료*",
+      "body": "월납 1개월(22,000원) 무료\n연납 첫해 한정 198,000원\n2년차 220,000원 · 모두 VAT 별도\n11/17 23:59까지 댓글 참여",
+      "handle": "@vibepay2026"
+    }
+  ],
+  "caption": "서비스는 만들었는데, 결제는 어떻게 하죠?\n바이브페이는 사업자등록 없이도 신청할 수 있고(심사·계약 후 이용), 심사는 접수 후 D+1일(영업일 기준)이에요. 보완이 필요하면 연장될 수 있어요.\n11/17(화) 오후 11시 59분까지 댓글로 참여하시면 오픈 기념 관리비 1개월 무료 혜택 대상이 돼요(적용 방법은 추후 안내).\n\n결제에서 막히는 곳은 대체로 세 군데예요. 가입·심사, 연동, 운영.\n하나씩 순서대로 준비하면 돼요. 저장해두고 오픈 전에 꺼내보세요.\n※ PG 신청과 세법상 사업자등록 의무는 별개예요. 판매 규모·반복성 등 상황에 따라 사업자등록·세금 신고가 필요할 수 있으니 국세청(126)이나 세무 전문가에게 확인하세요.\n\n[바이브페이 11/17 오픈 기념 댓글 이벤트]\n- 혜택: 관리비 1개월 무료\n  · 월납: 관리비 1개월(22,000원) 무료\n  · 연납: 첫해 220,000원 → 198,000원 (첫해 한정, 2년차부터 220,000원)\n  · 금액은 모두 VAT 별도\n- 참여: 2026년 11월 17일(화) 오후 11시 59분까지 댓글 남기기\n- 혜택 적용 방법 등 세부 참여 방법은 추후 안내드릴게요.\n- 혜택은 관리비에만 적용돼요. 가입비·수수료는 별도이며 실제 조건은 계약 시 안내드려요.\n- 개인·비사업자도 신청할 수 있지만 심사·계약·연동 테스트 후 이용할 수 있고, 업종·운영 방식에 따라 이용이 어려울 수 있어요.\n- 본 이벤트는 Instagram이 후원·관리하지 않습니다.",
+  "hashtags": [
+    "#창업",
+    "#개발자",
+    "#사이드프로젝트",
+    "#바이브코딩",
+    "#1인개발",
+    "#1인창업",
+    "#노코드",
+    "#결제연동",
+    "#PG심사",
+    "#PG연동",
+    "#웹훅",
+    "#비사업자결제",
+    "#바이브페이"
+  ],
+  "sources": [
+    "https://docs.channel.io/cafe24pro/ko/articles/%EA%B2%B0%EC%A0%9C%EC%84%9C%EB%B9%84%EC%8A%A4PG-%EC%96%B4%EB%96%BB%EA%B2%8C-%EC%8B%A0%EC%B2%AD%ED%95%B4%EC%95%BC-%ED%95%A0%EA%B9%8C-29ebd177",
+    "https://blog.portone.io/opi_high-risk-industry/",
+    "https://k-incorp.org/blog/virtual-office-pg-payment-gateway-merchant-approval-guide-2026",
+    "https://www.tosspayments.com/blog/articles/54253",
+    "https://www.tosspayments.com/blog/articles/paytech-6",
+    "https://aicourses-blog.pages.dev/ai-for-developers/stripe-payments-nextjs-supabase-security",
+    "https://aicourses-blog.pages.dev/ai-for-developers/stop-users-self-upgrading-paid-tiers-vibe-coded-saas",
+    "https://pastecode.xyz/checklists/review-ai-generated-stripe-code",
+    "https://techchat.tosspayments.com/m/1050707360886304788",
+    "https://apidog.com/kr/blog/payment-webhook-best-practices/",
+    "https://vibepay-makers.copperlime.chatgpt.site/ (brand/vibepay.md, 2026-11-08 확인: 개인 신청, 심사 D+1일, 오픈 혜택)"
+  ]
+}
