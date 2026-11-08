@@ -1,2 +1,40 @@
-# vibepay-cardnews
-VibePay Instagram card news images
+# 바이브페이 인스타그램 카드뉴스 에이전트팀
+
+## 실행
+```
+/cardnews PG심사 반려 사유
+```
+또는 단계별로: "research-scout 에이전트로 비사업자 결제 장벽 리서치해줘"
+
+## 팀 구성 (파이프라인)
+| 단계 | 에이전트 | 산출물 | 모델 |
+|---|---|---|---|
+| 0 | 편집장 (`/cardnews`, 메인 세션) | 단계 진행·최종 보고 | - |
+| 1 | research-scout | `research/*.md` 페인포인트+출처 | sonnet |
+| 2 | content-strategist | `content/<편>/brief.md` 구성안 | opus |
+| 3 | copywriter | `slides.json` 카피·캡션·해시태그 | opus |
+| 4 | compliance-checker | `review.md` 사실·과장·법세무 검수 (게이트) | opus |
+| 5 | card-designer | `out/*.png` 1080x1350 | sonnet |
+
+사람이 할 일: `brand/vibepay.md`의 [TODO] 채우기, `review.md`의 "사람 확인 필요" 답하기, 최종 업로드.
+
+> 정식 오픈 11/17 기준 날짜별 계획: `content/calendar.md`. 제품 정보는 `brand/vibepay.md` (랜딩페이지 기준).
+
+## 첫 4주 주제 백로그 (리서치로 검증 후 확정)
+**결제연동**
+1. AI가 짜준 결제 코드, 서버 금액 검증 없으면 생기는 일
+2. 테스트 결제는 되는데 라이브에서 안 될 때 체크리스트
+3. 웹훅이 뭔데 꼭 붙이라는 걸까
+4. 구독(정기결제) 붙이기 전 결정할 5가지
+
+**PG 심사**
+5. PG 심사에서 자주 막히는 5가지 (샘플: `content/_sample-pg-review`)
+6. 심사 전에 사이트에 꼭 있어야 하는 페이지
+7. 통신판매업 신고, 언제·어떻게?
+
+**비사업자/개인 장벽**
+8. 사업자 없으면 결제 못 받는다? 반은 맞고 반은 틀림
+9. 사이드프로젝트 첫 매출 전 세금 기초 (전문가 확인 문구 필수)
+10. 국내 PG vs 해외 결제 솔루션, 개인에게 맞는 건?
+11. 사업자등록 30분 가이드
+12. (브랜드) 바이브페이로 결제 붙인 사례 — 실제 고객 동의 받은 경우만
