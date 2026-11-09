@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Publish a rendered card-news folder to Instagram as a carousel (Instagram Graph API).
+"""Publish a rendered folder to Instagram: carousel (slides.json) or Reel (reel.json) via the Graph API.
 
 Usage:
   python3 scripts/publish_instagram.py content/<folder>               # dry run (default): checks only
@@ -20,7 +20,7 @@ Gates (refuses to publish unless all pass):
   - 2..10 JPEG slides, caption <= 2200 chars, <= 30 hashtags
   - every image URL answers HTTP 200 publicly
 """
-import json, os, re, ssl, sys, time, urllib.parse, urllib.request
+import json, os, re, ssl, subprocess, sys, time, urllib.parse, urllib.request
 
 # graph.instagram.com = "Instagram API with Instagram Login" (no Facebook Page needed, default)
 # graph.facebook.com  = "Instagram API with Facebook Login" (Page-linked account)
@@ -52,58 +52,89 @@ def main():
     if not args:
         die(__doc__)
     folder = args[0].rstrip("/")
-    spec = json.load(open(f"{folder}/slides.json", encoding="utf-8"))
+    is_reel = os.path.exists(f"{folder}/reel.json")
+    spec = json.load(open(f"{folder}/{'reel' if is_reel else 'slides'}.json", encoding="utf-8"))
+    container_only = "--container-only" in sys.argv  # test: build + process container, never publish
 
     # --- gates ---
     review = open(f"{folder}/review.md", encoding="utf-8").read() if os.path.exists(f"{folder}/review.md") else ""
-    if not re.search(r"판정:\s*(수정 후 )?PASS", review):
+    if not container_only and not re.search(r"판정:\s*(수정 후 )?PASS", review):
         die("review.md verdict is not PASS")
     if publish and not os.path.exists(f"{folder}/approved.txt"):
         die("approved.txt missing: a human must approve before publishing")
-    n = len(spec["slides"])
-    if not 2 <= n <= 10:
-        die(f"carousel needs 2-10 slides, got {n}")
-    caption = spec["caption"].rstrip() + "\n\n" + " ".join(spec.get("hashtags", []))
+    if publish and os.path.exists(f"{folder}/published.json"):
+        die("already published (published.json exists)")
+    caption = spec.get("caption", "").rstrip() + "\n\n" + " ".join(spec.get("hashtags", []))
     if len(caption) > 2200 or len(spec.get("hashtags", [])) > 30:
         die("caption > 2200 chars or > 30 hashtags")
     ig_user = os.environ.get("IG_USER_ID") or die("IG_USER_ID not set")
     base = (os.environ.get("IMAGE_BASE_URL") or die("IMAGE_BASE_URL not set")).rstrip("/")
-    urls = [f"{base}/{folder}/out/{i:02d}.jpg" for i in range(1, n + 1)]
-    for u in urls:
-        if not os.path.exists(f"{folder}/out/{u.rsplit('/', 1)[1]}"):
-            die(f"local JPEG missing for {u} (run scripts/render.js)")
-        code, _ = http("HEAD", u)
-        if code != 200:
-            die(f"image not publicly reachable ({code}): {u}")
-    print(f"OK: {n} slides, caption {len(caption)} chars, images reachable")
-    if not publish:
-        print("Dry run only. Add --publish to post."); return
 
-    # --- publish: children -> carousel container -> wait -> publish ---
-    children = []
-    for u in urls:
-        code, r = http("POST", f"{GRAPH}/{ig_user}/media", {"image_url": u, "is_carousel_item": "true"}, auth=True)
+    def reachable(local, url):
+        if not os.path.exists(local):
+            die(f"local file missing: {local} (render first)")
+        code, _ = http("HEAD", url)
+        if code != 200:
+            die(f"not publicly reachable ({code}): {url}")
+
+    if is_reel:
+        video, cover = f"{base}/{folder}/out/reel.mp4", f"{base}/{folder}/out/cover.jpg"
+        reachable(f"{folder}/out/reel.mp4", video); reachable(f"{folder}/out/cover.jpg", cover)
+        dur = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
+                                    f"{folder}/out/reel.mp4"], capture_output=True, text=True).stdout.strip() or 0)
+        if not 3 <= dur <= 90:
+            die(f"reel duration {dur}s outside 3-90s")
+        print(f"OK: reel {dur:.1f}s, caption {len(caption)} chars, video+cover reachable")
+    else:
+        n = len(spec["slides"])
+        if not 2 <= n <= 10:
+            die(f"carousel needs 2-10 slides, got {n}")
+        urls = [f"{base}/{folder}/out/{i:02d}.jpg" for i in range(1, n + 1)]
+        for u in urls:
+            reachable(f"{folder}/out/{u.rsplit('/', 1)[1]}", u)
+        print(f"OK: {n} slides, caption {len(caption)} chars, images reachable")
+    if not publish and not container_only:
+        print("Dry run only. Add --publish to post (or --container-only to test Meta processing)."); return
+
+    # --- containers ---
+    if is_reel:
+        code, r = http("POST", f"{GRAPH}/{ig_user}/media", {"media_type": "REELS", "video_url": video, "cover_url": cover,
+                                                            "caption": caption, "share_to_feed": "true"}, auth=True)
         if code != 200 or "id" not in r:
-            die(f"child container failed ({code}): {r}")
-        children.append(r["id"]); print("child", r["id"])
-    code, r = http("POST", f"{GRAPH}/{ig_user}/media",
-                   {"media_type": "CAROUSEL", "children": ",".join(children), "caption": caption}, auth=True)
-    if code != 200 or "id" not in r:
-        die(f"carousel container failed ({code}): {r}")
-    cid = r["id"]
-    for _ in range(30):
-        code, r = http("GET", f"{GRAPH}/{cid}?fields=status_code", auth=True)
-        if r.get("status_code") == "FINISHED":
+            die(f"reel container failed ({code}): {r}")
+        cid, tries = r["id"], 60  # video processing: up to ~5 min
+    else:
+        children = []
+        for u in urls:
+            code, r = http("POST", f"{GRAPH}/{ig_user}/media", {"image_url": u, "is_carousel_item": "true"}, auth=True)
+            if code != 200 or "id" not in r:
+                die(f"child container failed ({code}): {r}")
+            children.append(r["id"]); print("child", r["id"])
+        code, r = http("POST", f"{GRAPH}/{ig_user}/media",
+                       {"media_type": "CAROUSEL", "children": ",".join(children), "caption": caption}, auth=True)
+        if code != 200 or "id" not in r:
+            die(f"carousel container failed ({code}): {r}")
+        cid, tries = r["id"], 30
+    status = None
+    for _ in range(tries):
+        code, r = http("GET", f"{GRAPH}/{cid}?fields=status_code,status", auth=True)
+        status = r.get("status_code")
+        if status == "FINISHED":
             break
-        if r.get("status_code") == "ERROR":
+        if status == "ERROR":
             die(f"container error: {r}")
         time.sleep(5)
+    if status != "FINISHED":
+        die(f"container not ready in time (last status {status})")
+    if container_only:
+        print(f"CONTAINER OK {cid} (processed by Meta, NOT published; expires in 24h)"); return
     code, r = http("POST", f"{GRAPH}/{ig_user}/media_publish", {"creation_id": cid}, auth=True)
     if code != 200 or "id" not in r:
         die(f"publish failed ({code}): {r}")
     code, p = http("GET", f"{GRAPH}/{r['id']}?fields=permalink", auth=True)
     with open(f"{folder}/published.json", "w", encoding="utf-8") as f:
-        json.dump({"media_id": r["id"], "permalink": p.get("permalink"), "at": time.strftime("%Y-%m-%dT%H:%M:%S%z")}, f, ensure_ascii=False, indent=2)
+        json.dump({"media_id": r["id"], "permalink": p.get("permalink"), "format": "reel" if is_reel else "carousel",
+                   "at": time.strftime("%Y-%m-%dT%H:%M:%S%z")}, f, ensure_ascii=False, indent=2)
     print("PUBLISHED", p.get("permalink") or r["id"])
 
 
