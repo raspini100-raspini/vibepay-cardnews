@@ -1,6 +1,7 @@
 # VibePay 인스타그램 카드뉴스 팀
 
 - 제품 사실은 `brand/vibepay.md`만 사용한다. 없는 기능·수치는 쓰지 않는다.
+- **바이브페이 핵심 강점 2가지(대표 지시)**: ① D+1 빠른 심사(영업일 기준) ② 비사업자·개인도 PG 연동으로 고객에게 온라인 결제를 받을 수 있음(심사·계약 후 이용). 모든 카드뉴스·릴스의 바이브페이 장면과 캡션에서 가장 크게 보여준다.
 - 카드뉴스: `/cardnews <주제>` → research-scout → content-strategist → copywriter → compliance-checker → card-designer.
 - 릴스: `/reels <주제>` → research-scout → content-strategist → reel-scripter → compliance-checker → reel-producer.
   렌더: `node scripts/render_reel.js content/<폴더>/reel.json` (1080x1920 MP4 + cover.jpg). 게시 스크립트는 reel.json이 있으면 릴스로 게시.
