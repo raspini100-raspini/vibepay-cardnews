@@ -60,3 +60,4 @@ li::before { content: "✓"; color: var(--accent); font-weight: 900; }
 .stat .big { font-size: 64px; font-weight: 800; letter-spacing: -1.5px; color: #fff; }
 .stat .big em { font-style: normal; color: var(--highlight); }
 .stat .label { margin-top: 14px; font-size: 34px; line-height: 1.5; color: #C9DCEA; white-space: pre-line; }
+.body em, .sub em, li em { font-style: normal; color: var(--highlight); font-weight: 700; }
