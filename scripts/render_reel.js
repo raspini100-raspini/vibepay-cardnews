@@ -78,7 +78,7 @@ ul{list-style:none;display:flex;flex-direction:column;gap:30px}
 li{background:var(--card);border-radius:28px;padding:34px 40px;font-size:50px;line-height:1.35;display:flex;gap:24px}
 li::before{content:"✓";color:var(--accent);font-weight:900}
 .stat{background:rgba(255,255,255,.1);border-left:14px solid var(--hi);border-radius:28px;padding:40px 46px;display:flex;flex-direction:column;gap:12px}
-.stat b{font-size:76px;font-weight:900;letter-spacing:-1.5px}
+.stat b{font-size:76px;font-weight:900;letter-spacing:-1.5px;white-space:pre-line;display:block;line-height:1.2}
 .stat span{font-size:42px;line-height:1.45;color:#D6E4F5;white-space:pre-line}
 .handle{align-self:flex-start;background:#fff;color:var(--brand);font-size:52px;font-weight:900;padding:22px 46px;border-radius:999px}
 .brandmark{position:absolute;left:96px;bottom:150px;font-size:40px;font-weight:900;letter-spacing:-.5px;color:#fff;opacity:.9}
