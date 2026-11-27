@@ -130,7 +130,15 @@ def main():
         print(f"CONTAINER OK {cid} (processed by Meta, NOT published; expires in 24h)"); return
     code, r = http("POST", f"{GRAPH}/{ig_user}/media_publish", {"creation_id": cid}, auth=True)
     if code != 200 or "id" not in r:
-        die(f"publish failed ({code}): {r}")
+        # Meta sometimes errors (e.g. 403 code 4 / 2207051) after the post actually went live.
+        # Check the latest media before giving up, so a retry never double-posts.
+        time.sleep(10)
+        _, m = http("GET", f"{GRAPH}/{ig_user}/media?fields=id,caption&limit=3", auth=True)
+        live = next((x for x in m.get("data", []) if (x.get("caption") or "")[:60] == caption[:60]), None)
+        if not live:
+            die(f"publish failed ({code}): {r}")
+        print(f"WARN: publish returned {code} but the post is live ({live['id']}); recording it")
+        r = {"id": live["id"]}
     code, p = http("GET", f"{GRAPH}/{r['id']}?fields=permalink", auth=True)
     with open(f"{folder}/published.json", "w", encoding="utf-8") as f:
         json.dump({"media_id": r["id"], "permalink": p.get("permalink"), "format": "reel" if is_reel else "carousel",
